@@ -1,0 +1,48 @@
+<template>
+    <div @keyup.enter="login">
+        <el-row style="margin-top: 130px">
+            <el-col :span="8" :offset="8">
+                <el-card align="center" style="background:linear-gradient(to bottom right, #D3DCE6 , #EFF2F7);">
+                    <h3>login</h3>
+                    <el-row>
+                        <el-input placeholder="用户名" v-model="username" style="width: 80%"></el-input>
+                    </el-row>
+                    <el-row>
+                        <el-input type="password" placeholder="密码" v-model="password" style="width: 80%;margin-top: 10px"></el-input>
+                    </el-row>
+                    <el-row>
+                        <el-button type="primary" style="margin-top: 10px" @click="login">登录</el-button>
+                    </el-row>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+</template>
+<script>
+    export default{
+        methods: {
+            login()
+            {
+                if (this.username && this.password && this.username.trim() != "" && this.password.trim() != "") {
+                    this.$http.get('/api/login', {
+                        params: {
+                            name: this.username,
+                            password: this.password
+                        }
+                    }).then((response) => {
+                        if (response.body>0) {
+                            this.$store.commit("updateHeader",{'username':this.username,'password':this.password});
+                            this.$router.push({name: 'main'});
+                        } else {
+                            this.$message.error('账号或密码错误');
+                        }
+                    }, (response) => {
+                        this.$message.error('登录失败');
+                    });
+                } else {
+                    this.$message.warning('用户名和密码不能为空');
+                }
+            }
+        }
+    }
+</script>
