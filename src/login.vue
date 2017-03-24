@@ -32,7 +32,7 @@
                     }).then((response) => {
                         if (response.body>0) {
                             this.$store.commit("updateHeader",{'username':this.username,'password':this.password});
-                            this.$router.push({name: 'main'});
+                            this.$router.push({name: 'userList'});
                         } else {
                             this.$message.error('账号或密码错误');
                         }

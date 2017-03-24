@@ -8,10 +8,8 @@
     "build": "rimraf dist && webpack -p --progress --hide-modules"
   },
   "dependencies": {
-    "element-ui": "^1.1.2",
-    "leancloud-realtime": "^3.3.4",
-    "leancloud-storage": "^2.1.1",
-    "vue": "^2.1.8",
+    "element-ui": "1.2.3",
+    "vue": "2.2.3",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.2.0",
     "vuex": "^2.0.0"
