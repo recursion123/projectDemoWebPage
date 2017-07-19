@@ -8,6 +8,7 @@ import App from './App.vue'
 import login from './login.vue'
 import main from './main.vue'
 import userList from './userList.vue'
+import roleConfig from './roleConfig.vue'
 
 
 Vue.use(VueRouter)
@@ -21,22 +22,29 @@ const store = new Vuex.Store({
         header: ""
     },
     mutations: {
-        updateHeader (state,userinfo) {
-            state.header='Basic '+window.btoa(userinfo.username+":"+userinfo.password);
+        updateHeader (state, userinfo) {
+            state.header = 'Basic ' + window.btoa(userinfo.username + ":" + userinfo.password);
             Vue.http.headers.common['Authorization'] = state.header;
         }
     }
 })
 const router = new VueRouter({
     routes: [
-        {path: '/main', component: main, name: "main"},
-        {path: '/userList', component: userList, name: "userList"},
+        {
+            path: '/main',
+            component: main,
+            name: "main",
+            children: [{path: '', components:{
+                userList:userList,
+                roleConfig:roleConfig
+            } , name: "userList"}]
+        },
         {path: '/login', component: login, name: "login"},
-        {path:'/*',redirect: "login"}
+        {path: '/*', redirect: "login"}
     ]
 })
 
-const app=new Vue({
+const app = new Vue({
     render: h => h(App),
     router,
     store
