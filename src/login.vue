@@ -8,7 +8,8 @@
                         <el-input placeholder="用户名" v-model="username" style="width: 80%"></el-input>
                     </el-row>
                     <el-row>
-                        <el-input type="password" placeholder="密码" v-model="password" style="width: 80%;margin-top: 10px"></el-input>
+                        <el-input type="password" placeholder="密码" v-model="password"
+                                  style="width: 80%;margin-top: 10px"></el-input>
                     </el-row>
                     <el-row>
                         <el-button type="primary" style="margin-top: 10px" @click="login">登录</el-button>
@@ -19,17 +20,16 @@
     </div>
 </template>
 <script>
-    export default{
+    export default {
         methods: {
-            login()
-            {
+            login() {
                 if (this.username && this.password && this.username.trim() != "" && this.password.trim() != "") {
                     this.$http.post('/api/login', {
-                            name: this.username,
-                            password: this.password
+                        name: this.username,
+                        password: this.password
                     }).then((response) => {
-                        if (response.body>0) {
-                            this.$store.commit("updateHeader",{'username':this.username,'password':this.password});
+                        if (response.body > 0) {
+                            this.$store.commit("updateHeader", {'username': this.username, 'password': this.password});
                             this.$router.push({name: 'main'});
                         } else {
                             this.$message.error('账号或密码错误');
