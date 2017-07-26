@@ -9,6 +9,8 @@ import login from './login.vue'
 import main from './main.vue'
 import userList from './userList.vue'
 import roleConfig from './roleConfig.vue'
+import deptConfig from './deptConfig.vue'
+
 
 
 Vue.use(VueRouter)
@@ -36,7 +38,8 @@ const router = new VueRouter({
             name: "main",
             children: [{path: '', components:{
                 userList:userList,
-                roleConfig:roleConfig
+                roleConfig:roleConfig,
+                deptConfig:deptConfig
             } , name: "userList"}]
         },
         {path: '/login', component: login, name: "login"},

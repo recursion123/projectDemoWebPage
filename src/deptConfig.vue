@@ -4,17 +4,18 @@
             <el-row>
                 <el-col :span="16">
                     <el-card>
-                        <el-button type="text" @click="showDialog()">添加</el-button>
+                        <el-button type="text" @click="showDialog()"> 添加</el-button>
+
                         <el-table
-                                :data="userList"
+                                :data="deptList"
                                 style="width: 100%">
                             <el-table-column
-                                    prop="name"
-                                    label="姓名">
+                                    prop="id"
+                                    label="id">
                             </el-table-column>
                             <el-table-column
-                                    prop="dept.name"
-                                    label="部门">
+                                    prop="name"
+                                    label="名称">
                             </el-table-column>
                             <el-table-column
                                     label="操作">
@@ -24,16 +25,16 @@
                                         编辑
                                     </el-button>
                                     <el-popover
-                                            ref="popover"
+                                            ref="popoverDel"
                                             placement="top"
                                             width="160">
                                         <p>确定删除吗？</p>
                                         <div style="text-align: right; margin: 0">
-                                            <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定
+                                            <el-button type="primary" size="mini" @click="deleteRole(scope.row)">确定
                                             </el-button>
                                         </div>
                                     </el-popover>
-                                    <el-button size="small" type="danger" v-popover:popover>
+                                    <el-button size="small" type="danger" v-popover:popoverDel>
                                         删除
                                     </el-button>
                                 </template>
@@ -43,35 +44,17 @@
                 </el-col>
             </el-row>
         </template>
-        <el-dialog title="个人信息" v-model="dialogFormVisible">
+        <el-dialog title="角色信息" v-model="dialogFormVisible">
             <el-form :model="form">
-                <el-form-item label="账户名">
+                <el-form-item label="名称">
                     <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.password" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="部门">
-                    <el-select v-model="form.dept.id" placeholder="请选择">
-                        <el-option
-                                v-for="item in deptList"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="角色">
-                    <el-checkbox-group v-model="form.role">
-                        <el-checkbox v-for="obj in roleList" :label="obj.id">{{obj.name}}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="insertOrUpdateUser()">确 定</el-button>
+                <el-button type="primary" @click="insertOrUpdateRole()">确 定</el-button>
             </div>
+
         </el-dialog>
     </div>
 </template>
@@ -79,27 +62,15 @@
     export default {
         data() {
             return {
-                userList: [],
                 dialogFormVisible: false,
-                form: {dept:{}},
-                roleList: [],
-                operationType: "",
-                deptList:{}
+                form: {},
+                deletePop: false,
+                deptList: [],
+                operationType: ""
             }
         },
         methods: {
             loadData() {
-                this.$http.post('/api/user/list', {}).then((response) => {
-                    this.$data.userList = response.body;
-                }, (response) => {
-                    alert("请先登录!");
-                    this.$router.push({name: 'login'});
-                });
-                this.$http.post('/api/user/listRole', {}).then((response) => {
-                    this.$data.roleList = response.body;
-                }, (response) => {
-
-                });
                 this.$http.post('/api/user/listDept', {}).then((response) => {
                     this.$data.deptList = response.body;
                 }, (response) => {
@@ -112,21 +83,29 @@
                 if (operationType == "update") {
                     this.form = row;
                 } else {
-                    this.form = {role: []};
+                    this.form = {};
                 }
             },
-            insertOrUpdateUser() {
+            deleteRole(row) {
+                this.$http.post('/api/user/deleteDept',
+                    row).then((response) => {
+                    this.$message.info('删除成功！');
+                    this.loadData();
+                }, (response) => {
+                    alert(JSON.stringify(response.body));
+                });
+            },
+            insertOrUpdateRole() {
                 if (this.operationType == "update") {
-                    this.$http.post('/api/user/update',
+                    this.$http.post('/api/user/updateDept',
                         this.form).then((response) => {
                         this.$message.info('更新成功！');
-                        this.loadData();
                         this.dialogFormVisible = false;
                     }, (response) => {
                         alert(JSON.stringify(response.body));
                     });
                 } else {
-                    this.$http.post('/api/user/insert',
+                    this.$http.post('/api/user/insertDept',
                         this.form).then((response) => {
                         this.$message.info('添加成功！');
                         this.loadData();
@@ -135,15 +114,6 @@
                         alert(JSON.stringify(response.body));
                     });
                 }
-            },
-            deleteUser(row) {
-                this.$http.post('/api/user/delete',
-                    row).then((response) => {
-                    this.$message.info('删除成功！');
-                    this.loadData();
-                }, (response) => {
-                    alert(JSON.stringify(response.body));
-                });
             }
         },
         created: function () {
