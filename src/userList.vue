@@ -6,8 +6,10 @@
                     <el-card>
                         <el-button type="text" @click="showDialog()">添加</el-button>
                         <el-table
-                                :data="userList"
-                                style="width: 100%">
+                                :data="tableData"
+                                style="width: 100%"
+                                v-loading="loading"
+                                element-loading-text="拼命加载中">
                             <el-table-column
                                     prop="name"
                                     label="姓名">
@@ -39,6 +41,17 @@
                                 </template>
                             </el-table-column>
                         </el-table>
+                        <div class="block">
+                            <el-pagination
+                                    @size-change="handleSizeChange"
+                                    @current-change="handleCurrentChange"
+                                    :current-page="currentPage"
+                                    :page-sizes="[10, 20, 30, 40]"
+                                    :page-size="pageSize"
+                                    layout="total, sizes, prev, pager, next, jumper"
+                                    :total="total">
+                            </el-pagination>
+                        </div>
                     </el-card>
                 </el-col>
             </el-row>
@@ -80,31 +93,53 @@
         data() {
             return {
                 userList: [],
+                tableData:[],
                 dialogFormVisible: false,
-                form: {dept:{}},
+                form: {dept: {}},
                 roleList: [],
                 operationType: "",
-                deptList:{}
+                deptList: {},
+                loading: true,
+                currentPage: 1,
+                pageSize: 10,
+                total:0
             }
         },
         methods: {
             loadData() {
                 this.$http.post('/api/user/list', {}).then((response) => {
-                    this.$data.userList = response.body;
+                    this.userList=response.body;
+                    this.total=this.userList.length;
+                    this.showPageData();
+                    this.loading = false;
                 }, (response) => {
                     alert("请先登录!");
                     this.$router.push({name: 'login'});
                 });
                 this.$http.post('/api/user/listRole', {}).then((response) => {
-                    this.$data.roleList = response.body;
+                    this.roleList = response.body;
                 }, (response) => {
 
                 });
                 this.$http.post('/api/user/listDept', {}).then((response) => {
-                    this.$data.deptList = response.body;
+                    this.deptList = response.body;
                 }, (response) => {
 
                 });
+            },
+            showPageData() {
+                this.tableData = [];
+                for (var i = 0+(this.currentPage-1)*this.pageSize; i < this.currentPage*this.pageSize; i++) {
+                    this.tableData.push(this.userList[i]);
+                }
+            },
+            handleSizeChange(pageSize){
+                this.pageSize=pageSize;
+                this.showPageData();
+            },
+            handleCurrentChange(currentPage){
+                this.currentPage=currentPage;
+                this.showPageData();
             },
             showDialog(operationType, row) {
                 this.dialogFormVisible = true;
@@ -112,7 +147,7 @@
                 if (operationType == "update") {
                     this.form = row;
                 } else {
-                    this.form = {role: []};
+                    this.form = {role: [], dept: {id: ""}};
                 }
             },
             insertOrUpdateUser() {
