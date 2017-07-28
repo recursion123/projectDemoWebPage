@@ -129,7 +129,7 @@
             },
             showPageData() {
                 this.tableData = [];
-                for (var i = 0+(this.currentPage-1)*this.pageSize; i < this.currentPage*this.pageSize; i++) {
+                for (var i = 0+(this.currentPage-1)*this.pageSize; i < this.currentPage*this.pageSize&&i < this.total; i++) {
                     this.tableData.push(this.userList[i]);
                 }
             },
