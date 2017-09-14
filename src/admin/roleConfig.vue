@@ -79,8 +79,8 @@
             },
             showDialog(operationType, row) {
                 this.dialogFormVisible = true;
-                this.operationType=operationType;
-                if (operationType == "update") {
+                this.operationType = operationType;
+                if (operationType === "update") {
                     this.form = row;
                 } else {
                     this.form = {};
@@ -88,27 +88,27 @@
             },
             deleteRole(row) {
                 this.$http.post('/api/user/deleteRole',
-                    row).then((response) => {
+                    row).then(() => {
                     this.$message.info('删除成功！');
                     this.loadData();
                 }, (response) => {
                     alert(JSON.stringify(response.body));
                 });
             },
-            insertOrUpdateRole(){
-                if(this.operationType=="update"){
+            insertOrUpdateRole() {
+                if (this.operationType === "update") {
                     this.$http.post('/api/user/updateRole',
-                        this.form).then((response) => {
+                        this.form).then(() => {
                         this.$message.info('更新成功！');
                         this.dialogFormVisible = false;
                     }, (response) => {
                         alert(JSON.stringify(response.body));
                     });
-                }else{
+                } else {
                     this.$http.post('/api/user/insertRole',
-                        this.form).then((response) => {
+                        this.form).then(() => {
                         this.$message.info('添加成功！');
-                        this. loadData();
+                        this.loadData();
                         this.dialogFormVisible = false;
                     }, (response) => {
                         alert(JSON.stringify(response.body));

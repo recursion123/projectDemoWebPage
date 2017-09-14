@@ -20,8 +20,8 @@
             };
         },
         methods: {
-            handleClick(tab, event) {
-                if ("userManager" == this.activeName) {
+            handleClick() {
+                if ("userManager" === this.activeName) {
                     this.$router.push({name: 'userList'});
                 }
             }

@@ -37,6 +37,11 @@
     "vue-loader": "^10.0.0",
     "vue-template-compiler": "^2.1.10",
     "webpack": "^2.2.0-rc.4",
-    "webpack-dev-server": "^2.2.0"
+    "webpack-dev-server": "^2.2.0",
+    "bootstrap":"^3.3.6",
+    "jquery":"^2.2.0",
+    "summernote":"^0.8.1",
+    "font-awesome":"^4.5.0",
+    "codemirror":"^5.11.0"
   }
 }

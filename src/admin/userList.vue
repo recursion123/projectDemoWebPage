@@ -4,7 +4,7 @@
             <el-row>
                 <el-col :span="16">
                     <el-card>
-                        <el-button type="text" @click="showDialog()">添加</el-button>
+                        <el-button type="text" @click="showInfoDialog(false)">添加</el-button>
                         <el-table
                                 :data="tableData"
                                 style="width: 100%"
@@ -22,8 +22,8 @@
                                     label="操作">
                                 <template scope="scope">
                                     <el-button size="small" type="info"
-                                               @click="showDialog('update', scope.row)">
-                                        编辑
+                                               @click="showInfoDialog(true, scope.row)">
+                                        编辑信息
                                     </el-button>
                                     <el-popover
                                             ref="popover"
@@ -56,12 +56,19 @@
                 </el-col>
             </el-row>
         </template>
+
         <el-dialog title="个人信息" v-model="dialogFormVisible">
+            <div slot="title" class="dialog-title">
+                <el-radio-group v-model="updateType"  :style="{display:(isUpdate?'inline':'none')}">
+                    <el-radio-button label="基本信息"></el-radio-button>
+                    <el-radio-button label="修改密码"></el-radio-button>
+                </el-radio-group>
+            </div>
             <el-form :model="form">
                 <el-form-item label="账户名">
-                    <el-input v-model="form.name" auto-complete="off"></el-input>
+                    <el-input v-model="form.name" auto-complete="off" :disabled="isUpdate"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
+                <el-form-item label="密码" :style="{display:(isUpdate?'none':'block')}">
                     <el-input v-model="form.password" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="部门">
@@ -79,7 +86,6 @@
                         <el-checkbox v-for="obj in roleList" :label="obj.id">{{obj.name}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -93,26 +99,27 @@
         data() {
             return {
                 userList: [],
-                tableData:[],
+                tableData: [],
                 dialogFormVisible: false,
                 form: {dept: {}},
                 roleList: [],
-                operationType: "",
+                isUpdate: true,
                 deptList: {},
                 loading: true,
                 currentPage: 1,
                 pageSize: 10,
-                total:0
+                total: 0,
+                updateType:"基本信息"
             }
         },
         methods: {
             loadData() {
                 this.$http.post('/api/user/list', {}).then((response) => {
-                    this.userList=response.body;
-                    this.total=this.userList.length;
+                    this.userList = response.body;
+                    this.total = this.userList.length;
                     this.showPageData();
                     this.loading = false;
-                }, (response) => {
+                }, () => {
                     alert("请先登录!");
                     this.$router.push({name: 'login'});
                 });
@@ -129,31 +136,31 @@
             },
             showPageData() {
                 this.tableData = [];
-                for (var i = 0+(this.currentPage-1)*this.pageSize; i < this.currentPage*this.pageSize&&i < this.total; i++) {
+                for (let i = (this.currentPage - 1) * this.pageSize; i < this.currentPage * this.pageSize && i < this.total; i++) {
                     this.tableData.push(this.userList[i]);
                 }
             },
-            handleSizeChange(pageSize){
-                this.pageSize=pageSize;
+            handleSizeChange(pageSize) {
+                this.pageSize = pageSize;
                 this.showPageData();
             },
-            handleCurrentChange(currentPage){
-                this.currentPage=currentPage;
+            handleCurrentChange(currentPage) {
+                this.currentPage = currentPage;
                 this.showPageData();
             },
-            showDialog(operationType, row) {
+            showInfoDialog(isUpdate, row) {
                 this.dialogFormVisible = true;
-                this.operationType = operationType;
-                if (operationType == "update") {
+                this.isUpdate = isUpdate;
+                if (isUpdate) {
                     this.form = row;
                 } else {
                     this.form = {role: [], dept: {id: ""}};
                 }
             },
             insertOrUpdateUser() {
-                if (this.operationType == "update") {
+                if (this.isUpdate) {
                     this.$http.post('/api/user/update',
-                        this.form).then((response) => {
+                        this.form).then(() => {
                         this.$message.info('更新成功！');
                         this.loadData();
                         this.dialogFormVisible = false;
@@ -162,7 +169,7 @@
                     });
                 } else {
                     this.$http.post('/api/user/insert',
-                        this.form).then((response) => {
+                        this.form).then(() => {
                         this.$message.info('添加成功！');
                         this.loadData();
                         this.dialogFormVisible = false;
@@ -173,7 +180,7 @@
             },
             deleteUser(row) {
                 this.$http.post('/api/user/delete',
-                    row).then((response) => {
+                    row).then(() => {
                     this.$message.info('删除成功！');
                     this.loadData();
                 }, (response) => {

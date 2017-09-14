@@ -80,7 +80,7 @@
             showDialog(operationType, row) {
                 this.dialogFormVisible = true;
                 this.operationType = operationType;
-                if (operationType == "update") {
+                if (operationType === "update") {
                     this.form = row;
                 } else {
                     this.form = {};
@@ -88,7 +88,7 @@
             },
             deleteRole(row) {
                 this.$http.post('/api/user/deleteDept',
-                    row).then((response) => {
+                    row).then(() => {
                     this.$message.info('删除成功！');
                     this.loadData();
                 }, (response) => {
@@ -96,9 +96,9 @@
                 });
             },
             insertOrUpdateRole() {
-                if (this.operationType == "update") {
+                if (this.operationType === "update") {
                     this.$http.post('/api/user/updateDept',
-                        this.form).then((response) => {
+                        this.form).then(() => {
                         this.$message.info('更新成功！');
                         this.dialogFormVisible = false;
                     }, (response) => {
@@ -106,7 +106,7 @@
                     });
                 } else {
                     this.$http.post('/api/user/insertDept',
-                        this.form).then((response) => {
+                        this.form).then(() => {
                         this.$message.info('添加成功！');
                         this.loadData();
                         this.dialogFormVisible = false;

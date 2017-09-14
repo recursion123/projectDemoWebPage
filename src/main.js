@@ -2,21 +2,40 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
+
+import 'bootstrap/js/modal.js'
+import 'bootstrap/js/dropdown.js'
+import 'bootstrap/js/tooltip.js'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'font-awesome/css/font-awesome.css'
+import 'summernote'
+import 'summernote/dist/lang/summernote-zh-CN.min'
+import 'summernote/dist/summernote.css'
+import 'codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/javascript/javascript'
+
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+
 import App from './App.vue'
 import login from './login.vue'
-import main from './main.vue'
-import userList from './userList.vue'
-import roleConfig from './roleConfig.vue'
-import deptConfig from './deptConfig.vue'
 
+import adminMain from './admin/main.vue'
+import userList from './admin/userList.vue'
+import roleConfig from './admin/roleConfig.vue'
+import deptConfig from './admin/deptConfig.vue'
 
+import blog from './blog/main.vue'
+import articleList from './blog/articleList.vue'
+import edit from './blog/edit.vue'
+import article from './blog/article.vue'
+import about from './blog/about.vue'
 
-Vue.use(VueRouter)
-Vue.use(VueResource)
-Vue.use(ElementUI)
-Vue.use(Vuex)
+Vue.use(VueRouter);
+Vue.use(VueResource);
+Vue.use(ElementUI);
+Vue.use(Vuex);
 
 
 const store = new Vuex.Store({
@@ -24,7 +43,7 @@ const store = new Vuex.Store({
         header: ""
     },
     mutations: {
-        updateHeader (state, userinfo) {
+        updateHeader(state, userinfo) {
             state.header = 'Basic ' + window.btoa(userinfo.username + ":" + userinfo.password);
             Vue.http.headers.common['Authorization'] = state.header;
         }
@@ -33,25 +52,42 @@ const store = new Vuex.Store({
 const router = new VueRouter({
     routes: [
         {
-            path: '/main',
-            component: main,
-            name: "main",
-            children: [{path: '', components:{
-                userList:userList,
-                roleConfig:roleConfig,
-                deptConfig:deptConfig
-            } , name: "userList"}]
+            path: '/admin/main',
+            component: adminMain,
+            name: "adminMain",
+            children: [{
+                path: '', components: {
+                    userList: userList,
+                    roleConfig: roleConfig,
+                    deptConfig: deptConfig
+                }, name: "userList"
+            }]
         },
         {path: '/login', component: login, name: "login"},
-        {path: '/*', redirect: "login"}
+        {
+            path: '/blog/main', component: blog, name: "blog", children: [
+            {path: '', component: articleList, name: "articleList"},
+            {path: 'about', component: about, name: "about"}
+        ]
+        },
+        {path: '/blog/article', component: article, name: "article"},
+        {path: '/edit', component: edit, name: "edit"},
+
+        {path: '/*', redirect: "/blog/main"}
     ]
-})
+});
 
 const app = new Vue({
     render: h => h(App),
     router,
     store
-}).$mount('#app')
+}).$mount('#app');
+
+
+Vue.prototype.goto = function (routeName, params) {
+    this.$router.push({name: routeName, params: params});
+};
+
 
 //Vue.http.headers.common['Authorization'] = 'Basic '+window.btoa(app.$data.username+":"+app.$data.password);
 

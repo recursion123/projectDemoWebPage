@@ -5,7 +5,7 @@
                 <el-card align="center" style="background:linear-gradient(to bottom right, #D3DCE6 , #EFF2F7);"
                          v-loading="loading"
                          element-loading-text="登陆中">
-                    <h3>login</h3>
+                    <h3>用户登录</h3>
                     <el-row>
                         <el-input placeholder="用户名" v-model="username" style="width: 80%"></el-input>
                     </el-row>
@@ -25,12 +25,14 @@
     export default {
         data(){
             return {
+                username:"",
+                password:"",
                 loading:false
             }
         },
         methods: {
             login() {
-                if (this.username && this.password && this.username.trim() != "" && this.password.trim() != "") {
+                if (this.username && this.password && this.username.trim() !== "" && this.password.trim() !== "") {
                     this.loading=true;
                     this.$http.post('/api/login', {
                         name: this.username,
@@ -38,11 +40,11 @@
                     }).then((response) => {
                         if (response.body > 0) {
                             this.$store.commit("updateHeader", {'username': this.username, 'password': this.password});
-                            this.$router.push({name: 'main'});
+                            this.$router.push({name: 'adminMain'});
                         } else {
                             this.$message.error('账号或密码错误');
                         }
-                    }, (response) => {
+                    }, () => {
                         this.$message.error('登录失败');
                     }).then(()=>{
                         this.loading=false;
