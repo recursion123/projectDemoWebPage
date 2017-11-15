@@ -57,9 +57,9 @@
             </el-row>
         </template>
 
-        <el-dialog title="个人信息" v-model="dialogFormVisible">
+        <el-dialog title="个人信息" :visible.sync="dialogFormVisible">
             <div slot="title" class="dialog-title">
-                <el-radio-group v-model="updateType"  :style="{display:(isUpdate?'inline':'none')}">
+                <el-radio-group v-model="updateType" :style="{display:(isUpdate?'inline':'none')}">
                     <el-radio-button label="基本信息"></el-radio-button>
                     <el-radio-button label="修改密码"></el-radio-button>
                 </el-radio-group>
@@ -109,7 +109,7 @@
                 currentPage: 1,
                 pageSize: 10,
                 total: 0,
-                updateType:"基本信息"
+                updateType: "基本信息"
             }
         },
         methods: {

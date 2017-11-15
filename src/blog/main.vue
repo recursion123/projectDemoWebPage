@@ -28,15 +28,13 @@
             handleSelect(index) {
                 switch (index) {
                     case "1":
-                        this.goto("articleList");
+                        this.goto("/blog/main/articleList");
                         break;
                     case "2":
-                        this.goto("about");
+                        this.goto("/blog/main/about");
                         break;
                 }
             }
         }
     };
-
-
 </script>

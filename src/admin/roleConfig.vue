@@ -44,7 +44,7 @@
                 </el-col>
             </el-row>
         </template>
-        <el-dialog title="角色信息" v-model="dialogFormVisible">
+        <el-dialog title="角色信息" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <el-form-item label="名称">
                     <el-input v-model="form.name" auto-complete="off"></el-input>

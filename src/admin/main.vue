@@ -1,32 +1,43 @@
 <template>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="用户管理" name="userManager">
-            <router-view name="userList"></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="角色配置" name="second">
-            <router-view name="roleConfig"></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="部门维护" name="third">
-            <router-view name="deptConfig"></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="其他" name="fourth">其他</el-tab-pane>
-    </el-tabs>
+    <div>
+        <hr/>
+        <el-row>
+            <el-col :span="4">
+                <el-menu class="el-menu-demo" :default-active="activeIndex" @select="handleSelect">
+                    <el-menu-item class="el-menu-item" index="1"><i class="fa fa-book"> 用户管理</i></el-menu-item>
+                    <el-menu-item class="el-menu-item" index="2"><i class="fa fa-info-circle"> 角色配置</i></el-menu-item>
+                    <el-menu-item class="el-menu-item" index="3"><i class="fa fa-info-circle"> 部门维护</i></el-menu-item>
+                    <el-menu-item class="el-menu-item" index="4"><i class="fa fa-info-circle"> 文章列表</i></el-menu-item>
+                </el-menu>
+            </el-col>
+            <el-col :span="20" style="padding-left: 30px;padding-top: 30px">
+                <router-view></router-view>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 <script>
     export default {
         data() {
-            return {
-                activeName: 'userManager',
-            };
+            return {activeIndex: '1'};
         },
         methods: {
-            handleClick() {
-                if ("userManager" === this.activeName) {
-                    this.$router.push({name: 'userList'});
+            handleSelect(index) {
+                switch (index) {
+                    case "1":
+                        this.goto("/admin/main");
+                        break;
+                    case "2":
+                        this.goto("/admin/main/roleConfig");
+                        break;
+                    case "3":
+                        this.goto("/admin/main/deptConfig");
+                        break;
+                    case "4":
+                        this.goto("/edit");
+                        break;
                 }
             }
         }
     };
-
-
 </script>

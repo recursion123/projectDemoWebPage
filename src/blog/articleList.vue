@@ -3,10 +3,9 @@
         <el-row>
             <el-col :span="3" class="left-bar">
                 <el-input
-                        placeholder="请输入搜索内容"
-                        icon="search"
-                        v-model="condition"
-                        :on-icon-click="search">
+                        placeholder="请输入过滤内容"
+                        suffix-icon="search"
+                        v-model="condition">
                 </el-input>
                 <hr/>
                 <el-row v-for="m in 5">
@@ -18,14 +17,21 @@
                     <el-col :span="8" class="text item">
                         <el-card class="box-card">
                             <el-row style="margin-bottom: 10px">
-                                <el-button type="text" @click="goto('article',article)" class="title">
+                                <el-button type="text" @click="goto('/blog/article/'+article.id)" class="title">
                                     {{article.title}}
                                 </el-button>
                             </el-row>
-                            <el-tag v-for="tag in article.tags" :key="tag.name" :type="tag.type"
-                                    class="article-tag">
-                                {{tag.name}}
-                            </el-tag>
+                            <el-row>
+                                <el-col :span="16">
+                                    <el-tag v-for="tag in article.tags" :key="tag.name" :type="tag.type"
+                                            class="article-tag">
+                                        {{tag.name}}
+                                    </el-tag>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-tag>{{article.updateTime}}</el-tag>
+                                </el-col>
+                            </el-row>
                         </el-card>
                     </el-col>
                 </div>
@@ -65,29 +71,25 @@
 </style>
 <script>
     export default {
-        mounted() {
-
-        },
         data() {
             return {
-                articleList: [{
-                    title: "第一篇",
-                    tags: [{name: "标签1", type: "primary"}, {name: "标签2", type: "success"}]
-                }, {
-                    title: "第二篇",
-                    tags: [{name: "标签1", type: "primary"}, {name: "标签2", type: "success"}]
-                }, {title: "第三篇", tags: [{name: "标签1", type: "primary"}, {name: "标签2", type: "success"}]}],
+                articleList: [],
                 condition: "",
                 activeTag: ""
             }
         },
         methods: {
-            search() {
-                alert(this.condition);
+            loadData() {
+                this.$http.post('/api/blog/listArticle', {}).then((response) => {
+                    this.articleList = response.body;
+                }, () => {
+                    alert("请先登录!");
+                    this.$router.push({name: 'login'});
+                });
             }
         },
         created: function () {
-
+            this.loadData();
         },
         computed: {
             articleListResult: function () {

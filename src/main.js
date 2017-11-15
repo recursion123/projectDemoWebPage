@@ -16,12 +16,12 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+import 'element-ui/lib/theme-chalk/index.css'
 
 import App from './App.vue'
 import login from './login.vue'
 
-import adminMain from './admin/main.vue'
+import admin from './admin/main.vue'
 import userList from './admin/userList.vue'
 import roleConfig from './admin/roleConfig.vue'
 import deptConfig from './admin/deptConfig.vue'
@@ -31,6 +31,7 @@ import articleList from './blog/articleList.vue'
 import edit from './blog/edit.vue'
 import article from './blog/article.vue'
 import about from './blog/about.vue'
+
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -52,25 +53,21 @@ const store = new Vuex.Store({
 const router = new VueRouter({
     routes: [
         {
-            path: '/admin/main',
-            component: adminMain,
-            name: "adminMain",
-            children: [{
-                path: '', components: {
-                    userList: userList,
-                    roleConfig: roleConfig,
-                    deptConfig: deptConfig
-                }, name: "userList"
-            }]
+            path: '/admin/main', component: admin, name: "admin", children: [
+                {path: '', component: userList, name: "userList"},
+                {path: 'roleConfig', component: roleConfig, name: "roleConfig"},
+                {path: 'deptConfig', component: deptConfig, name: "deptConfig"},
+                {path: 'roleConfig', component: roleConfig, name: "roleConfig"}
+            ]
         },
         {path: '/login', component: login, name: "login"},
         {
             path: '/blog/main', component: blog, name: "blog", children: [
-            {path: '', component: articleList, name: "articleList"},
-            {path: 'about', component: about, name: "about"}
-        ]
+                {path: '', component: articleList, name: "articleList"},
+                {path: 'about', component: about, name: "about"}
+            ]
         },
-        {path: '/blog/article', component: article, name: "article"},
+        {path: '/blog/article/:articleID', component: article, name: "article"},
         {path: '/edit', component: edit, name: "edit"},
 
         {path: '/*', redirect: "/blog/main"}
@@ -84,8 +81,8 @@ const app = new Vue({
 }).$mount('#app');
 
 
-Vue.prototype.goto = function (routeName, params) {
-    this.$router.push({name: routeName, params: params});
+Vue.prototype.goto = function (path) {
+    this.$router.push({path: path});
 };
 
 
