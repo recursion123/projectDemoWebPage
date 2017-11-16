@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-button type="text" icon="arrow-left" @click="goto('/admin/main/adminArticleList')" class="back">返回列表
+            <el-button type="text" icon="arrow-left" @click="goto('/admin/main')" class="back">返回列表
             </el-button>
         </el-row>
         <el-row>
