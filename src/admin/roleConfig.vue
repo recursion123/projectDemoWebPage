@@ -73,8 +73,9 @@
             loadData() {
                 this.$http.post('/api/user/listRole', {}).then((response) => {
                     this.$data.roleList = response.body;
-                }, (response) => {
-
+                }, () => {
+                    alert("请先登录!");
+                    this.$router.push({name: 'login'});
                 });
             },
             showDialog(operationType, row) {

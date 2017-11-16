@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button type="text" icon="arrow-left" @click="goto('/blog/articleList')" class="back">返回列表</el-button>
+        <el-button type="text" icon="arrow-left" @click="goto('/blog/main/articleList')" class="back">返回列表</el-button>
         <h1 align="center">{{article.title}}</h1>
         <hr/>
         <el-col :span="20" :offset="2">

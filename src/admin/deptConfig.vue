@@ -5,7 +5,6 @@
                 <el-col :span="16">
                     <el-card>
                         <el-button type="text" @click="showDialog()"> 添加</el-button>
-
                         <el-table
                                 :data="deptList"
                                 style="width: 100%">
@@ -74,7 +73,8 @@
                 this.$http.post('/api/user/listDept', {}).then((response) => {
                     this.$data.deptList = response.body;
                 }, (response) => {
-
+                    alert("请先登录!");
+                    this.$router.push({name: 'login'});
                 });
             },
             showDialog(operationType, row) {

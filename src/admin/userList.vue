@@ -118,7 +118,6 @@
                     this.userList = response.body;
                     this.total = this.userList.length;
                     this.showPageData();
-                    this.loading = false;
                 }, () => {
                     alert("请先登录!");
                     this.$router.push({name: 'login'});
@@ -135,10 +134,12 @@
                 });
             },
             showPageData() {
+                this.loading = true;
                 this.tableData = [];
                 for (let i = (this.currentPage - 1) * this.pageSize; i < this.currentPage * this.pageSize && i < this.total; i++) {
                     this.tableData.push(this.userList[i]);
                 }
+                this.loading = false;
             },
             handleSizeChange(pageSize) {
                 this.pageSize = pageSize;

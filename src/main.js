@@ -25,10 +25,11 @@ import admin from './admin/main.vue'
 import userList from './admin/userList.vue'
 import roleConfig from './admin/roleConfig.vue'
 import deptConfig from './admin/deptConfig.vue'
+import adminArticleList from './admin/adminArticleList.vue'
+import editArticle from './admin/editArticle.vue'
 
 import blog from './blog/main.vue'
 import articleList from './blog/articleList.vue'
-import edit from './blog/edit.vue'
 import article from './blog/article.vue'
 import about from './blog/about.vue'
 
@@ -41,7 +42,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        header: ""
+        header: "",
     },
     mutations: {
         updateHeader(state, userinfo) {
@@ -54,10 +55,12 @@ const router = new VueRouter({
     routes: [
         {
             path: '/admin/main', component: admin, name: "admin", children: [
-                {path: '', component: userList, name: "userList"},
+                {path: '', component: adminArticleList, name: 'adminArticleList'},
+                {path: 'userList', component: userList, name: "userList"},
                 {path: 'roleConfig', component: roleConfig, name: "roleConfig"},
                 {path: 'deptConfig', component: deptConfig, name: "deptConfig"},
-                {path: 'roleConfig', component: roleConfig, name: "roleConfig"}
+                {path: 'roleConfig', component: roleConfig, name: "roleConfig"},
+                {path: 'editArticle/:articleID', component: editArticle, name: "editArticle"}
             ]
         },
         {path: '/login', component: login, name: "login"},
@@ -68,8 +71,6 @@ const router = new VueRouter({
             ]
         },
         {path: '/blog/article/:articleID', component: article, name: "article"},
-        {path: '/edit', component: edit, name: "edit"},
-
         {path: '/*', redirect: "/blog/main"}
     ]
 });

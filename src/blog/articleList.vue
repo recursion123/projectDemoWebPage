@@ -8,9 +8,11 @@
                         v-model="condition">
                 </el-input>
                 <hr/>
-                <el-row v-for="m in 5">
-                    <el-button type="text" class="text item">标签{{m}}</el-button>
-                </el-row>
+                <el-menu>
+                    <el-menu-item v-for="tag in articleTagList" :index="tag.id">
+                        {{tag.name}}
+                    </el-menu-item>
+                </el-menu>
             </el-col>
             <el-col :span="21">
                 <div v-for="article in articleListResult">
@@ -74,6 +76,7 @@
         data() {
             return {
                 articleList: [],
+                articleTagList: [],
                 condition: "",
                 activeTag: ""
             }
@@ -83,8 +86,12 @@
                 this.$http.post('/api/blog/listArticle', {}).then((response) => {
                     this.articleList = response.body;
                 }, () => {
-                    alert("请先登录!");
-                    this.$router.push({name: 'login'});
+                    alert("error");
+                });
+                this.$http.post('/api/blog/listArticleTag', {}).then((response) => {
+                    this.articleTagList = response.body;
+                }, () => {
+                    alert("error");
                 });
             }
         },
