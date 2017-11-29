@@ -85,7 +85,7 @@
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['table', ['table']],
-                    ['insert', ['link', 'picture', 'hr']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
                     ['view', ['fullscreen', 'codeview']],
                     ['help', ['help']],
                     ['SaveButton', ['SaveButton']]
@@ -115,20 +115,24 @@
             },
             saveArticle() {
                 this.article.content = $('.summernote').summernote('code');
-                if (this.$route.params.articleID != 0) {
-                    this.$http.post('/api/admin/updateArticle',
-                        this.article).then(() => {
-                        this.$message.info('更新成功');
-                    }, (response) => {
-                        alert(JSON.stringify(response.body));
-                    });
+                if (this.article.tags && this.article.title) {
+                    if (this.$route.params.articleID != 0) {
+                        this.$http.post('/api/admin/updateArticle',
+                            this.article).then(() => {
+                            this.$message.success('更新成功');
+                        }, (response) => {
+                            this.$message.error('更新失败');
+                        });
+                    } else {
+                        this.$http.post('/api/admin/insertArticle',
+                            this.article).then(() => {
+                            this.$message.success('保存成功');
+                        }, (response) => {
+                            this.$message.error('保存失败');
+                        });
+                    }
                 } else {
-                    this.$http.post('/api/admin/insertArticle',
-                        this.article).then(() => {
-                        this.$message.info('保存成功');
-                    }, (response) => {
-                        alert(JSON.stringify(response.body));
-                    });
+                    this.$message.error('标题和标签不能为空');
                 }
             },
             handleClose(tag) {

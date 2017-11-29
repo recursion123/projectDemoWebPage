@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
+import "babel-polyfill";
 
 import 'bootstrap/js/modal.js'
 import 'bootstrap/js/dropdown.js'
@@ -86,7 +87,7 @@ Vue.prototype.goto = function (path) {
     this.$router.push({path: path});
 };
 
+jQuery('meta[name="viewport"]').attr('content', "width=device-width, initial-scale=0.8, maximum-scale=1, user-scalable=no");
+
 
 //Vue.http.headers.common['Authorization'] = 'Basic '+window.btoa(app.$data.username+":"+app.$data.password);
-
-

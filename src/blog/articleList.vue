@@ -1,39 +1,35 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="3" class="left-bar">
+            <el-col :span="2">
                 <el-input
                         placeholder="请输入过滤内容"
                         suffix-icon="search"
                         v-model="condition">
                 </el-input>
                 <hr/>
-                <el-menu>
-                    <el-menu-item v-for="tag in articleTagList" :index="tag.id">
+                <el-menu @select="handleSelect">
+                    <el-menu-item v-for="tag in articleTagList" :index="tag.name">
                         {{tag.name}}
                     </el-menu-item>
                 </el-menu>
             </el-col>
-            <el-col :span="21">
+            <el-col :span="22" style="padding: 18px">
                 <div v-for="article in articleListResult">
-                    <el-col :span="8" class="text item">
-                        <el-card class="box-card">
+                    <el-col :span="6">
+                        <el-card class="box-card" style="margin: 5px">
+                            <el-button type="text" @click="goto('/blog/article/'+article.id)" class="title">
+                                {{article.title}}
+                            </el-button>
                             <el-row style="margin-bottom: 10px">
-                                <el-button type="text" @click="goto('/blog/article/'+article.id)" class="title">
-                                    {{article.title}}
-                                </el-button>
+                                <el-tag v-for="tag in article.tags" :key="tag.name" :type="tag.type" size="mini"
+                                        class="article-tag">
+                                    {{tag.name}}
+                                </el-tag>
                             </el-row>
-                            <el-row>
-                                <el-col :span="16">
-                                    <el-tag v-for="tag in article.tags" :key="tag.name" :type="tag.type"
-                                            class="article-tag">
-                                        {{tag.name}}
-                                    </el-tag>
-                                </el-col>
-                                <el-col :span="4">
-                                    <el-tag>{{article.updateTime}}</el-tag>
-                                </el-col>
-                            </el-row>
+                            <div class="bottom clearfix">
+                                <time class="time">{{article.updateTime}}</time>
+                            </div>
                         </el-card>
                     </el-col>
                 </div>
@@ -42,33 +38,18 @@
     </div>
 </template>
 <style>
-    .left-bar {
-        border: solid;
-        border-width: 0px 1px;
-        color: #D4D4D4;
-        padding-right: 20px;
-    }
-
     .article-tag {
         margin-left: 10px;
     }
 
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
+
     .title {
-        font-size: 22px;
+        font-size: 24px;
         color: cornflowerblue;
-    }
-
-    .text {
-        font-size: 22px;
-    }
-
-    .item {
-        padding-left: 18px;
-        padding-bottom: 18px;
-    }
-
-    .box-card {
-        width: 480px;
     }
 </style>
 <script>
@@ -78,7 +59,7 @@
                 articleList: [],
                 articleTagList: [],
                 condition: "",
-                activeTag: ""
+                activeTagName: ""
             }
         },
         methods: {
@@ -93,6 +74,9 @@
                 }, () => {
                     alert("error");
                 });
+            },
+            handleSelect(index) {
+                this.activeTagName = index;
             }
         },
         created: function () {
@@ -101,10 +85,20 @@
         computed: {
             articleListResult: function () {
                 let condition = this.condition;
-                let activeTag = this.activeTag;
+                let activeTagName = this.activeTagName;
                 return this.articleList.filter(function (article) {
-                    return article.title.indexOf(condition) > -1;
-                })
+                    let tagFlag = false;
+                    if (activeTagName == "") {
+                        tagFlag = true;
+                    } else {
+                        article.tags.forEach(function (tag) {
+                            if (tag.name == activeTagName) {
+                                tagFlag = true;
+                            }
+                        });
+                    }
+                    return article.title.indexOf(condition) > -1 && tagFlag;
+                });
             }
         }
     }

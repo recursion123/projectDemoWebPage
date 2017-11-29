@@ -10,7 +10,7 @@
                     <el-menu-item class="el-menu-item" index="4"><i class="fa fa-info-circle"> 部门维护</i></el-menu-item>
                 </el-menu>
             </el-col>
-            <el-col :span="22" style="padding-left: 30px;padding-top: 30px">
+            <el-col :span="22" style="padding: 30px">
                 <router-view></router-view>
             </el-col>
         </el-row>
@@ -36,7 +36,6 @@
                     case "4":
                         this.goto("/admin/main/deptConfig");
                         break;
-
                 }
             }
         }

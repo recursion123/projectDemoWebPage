@@ -37,6 +37,7 @@
     "jquery":"^2.2.0",
     "summernote":"^0.8.1",
     "font-awesome":"^4.5.0",
-    "codemirror":"^5.11.0"
+    "codemirror":"^5.11.0",
+    "babel-polyfill": "^6.23.0"
   }
 }

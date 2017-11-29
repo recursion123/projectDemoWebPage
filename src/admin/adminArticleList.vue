@@ -115,7 +115,7 @@
                 });
             }
         },
-        created: function () {
+        mounted: function () {
             this.loadData();
         }
     }

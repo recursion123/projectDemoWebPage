@@ -8,15 +8,6 @@
         <router-view></router-view>
     </div>
 </template>
-<style>
-    .el-menu {
-        padding-left: 30px;
-    }
-
-    .el-menu-item {
-        font-size: 20px;
-    }
-</style>
 <script>
     export default {
         data() {

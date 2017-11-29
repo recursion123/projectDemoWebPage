@@ -7,6 +7,7 @@ module.exports = (options = {}) => ({
     entry: {
         index: './src/main.js'
     },
+    entry: ["babel-polyfill", "./src/main.js"],
     output: {
         path: resolve(__dirname, 'dist'),
         filename: options.dev ? '[name].js' : '[name].js?[chunkhash]',
