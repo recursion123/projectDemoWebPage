@@ -106,8 +106,8 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/blog/findArticleByID?id=' + this.$route.params.articleID, {}).then((response) => {
-                    this.article = response.body;
+                this.axios.post('/api/blog/findArticleByID?id=' + this.$route.params.articleID, {}).then((response) => {
+                    this.article = response.data;
                     $('.summernote').summernote('code', this.article.content);
                 }, () => {
                     alert("error");
@@ -117,14 +117,14 @@
                 this.article.content = $('.summernote').summernote('code');
                 if (this.article.tags && this.article.title) {
                     if (this.$route.params.articleID != 0) {
-                        this.$http.post('/api/admin/updateArticle',
+                        this.axios.post('/api/admin/updateArticle',
                             this.article).then(() => {
                             this.$message.success('更新成功');
                         }, (response) => {
                             this.$message.error('更新失败');
                         });
                     } else {
-                        this.$http.post('/api/admin/insertArticle',
+                        this.axios.post('/api/admin/insertArticle',
                             this.article).then(() => {
                             this.$message.success('保存成功');
                         }, (response) => {
@@ -149,12 +149,12 @@
             handleInputConfirm() {
                 let inputValue = this.inputValue;
                 if (inputValue.name) {
-                    this.$http.post('/api/admin/insertArticleTag',
+                    this.axios.post('/api/admin/insertArticleTag',
                         inputValue).then((response) => {
-                        inputValue.id = response.body;
+                        inputValue.id = response.data;
                         this.article.tags.push(inputValue);
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 }
                 this.inputVisible = false;

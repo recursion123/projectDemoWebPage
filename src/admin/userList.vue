@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div ref="jsoneditor" style="width: 400px; height: 400px;"></div>
         <template>
             <el-row>
                 <el-col :span="16">
@@ -96,6 +97,22 @@
 </template>
 <script>
     export default {
+        mounted() {
+            const  aaa = this.$refs.jsoneditor;
+            const  options = {};
+            this.editor = new JSONEditor(aaa, options);
+            var json = {
+                "Array": [1, 2, 3],
+                "Boolean": true,
+                "Null": null,
+                "Number": 123,
+                "Object": {"a": "b", "c": "d"},
+                "String": "Hello World"
+            };
+            this.editor.set(json);
+            alert(111);
+            // get json
+        },
         data() {
             return {
                 userList: [],
@@ -114,21 +131,21 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/user/list', {}).then((response) => {
-                    this.userList = response.body;
+                this.axios.post('/api/user/list', {}).then((response) => {
+                    this.userList = response.data;
                     this.total = this.userList.length;
                     this.showPageData();
                 }, () => {
                     alert("请先登录!");
                     this.$router.push({name: 'login'});
                 });
-                this.$http.post('/api/user/listRole', {}).then((response) => {
-                    this.roleList = response.body;
+                this.axios.post('/api/user/listRole', {}).then((response) => {
+                    this.roleList = response.data;
                 }, (response) => {
 
                 });
-                this.$http.post('/api/user/listDept', {}).then((response) => {
-                    this.deptList = response.body;
+                this.axios.post('/api/user/listDept', {}).then((response) => {
+                    this.deptList = response.data;
                 }, (response) => {
 
                 });
@@ -160,32 +177,32 @@
             },
             insertOrUpdateUser() {
                 if (this.isUpdate) {
-                    this.$http.post('/api/user/update',
+                    this.axios.post('/api/user/update',
                         this.form).then(() => {
                         this.$message.info('更新成功！');
                         this.loadData();
                         this.dialogFormVisible = false;
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 } else {
-                    this.$http.post('/api/user/insert',
+                    this.axios.post('/api/user/insert',
                         this.form).then(() => {
                         this.$message.info('添加成功！');
                         this.loadData();
                         this.dialogFormVisible = false;
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 }
             },
             deleteUser(row) {
-                this.$http.post('/api/user/delete',
+                this.axios.post('/api/user/delete',
                     row).then(() => {
                     this.$message.info('删除成功！');
                     this.loadData();
                 }, (response) => {
-                    alert(JSON.stringify(response.body));
+                    alert(JSON.stringify(response.data));
                 });
             }
         },

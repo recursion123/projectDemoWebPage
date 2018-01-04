@@ -70,8 +70,8 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/user/listDept', {}).then((response) => {
-                    this.$data.deptList = response.body;
+                this.axios.post('/api/user/listDept', {}).then((response) => {
+                    this.$data.deptList = response.data;
                 }, (response) => {
                     alert("请先登录!");
                     this.$router.push({name: 'login'});
@@ -87,31 +87,31 @@
                 }
             },
             deleteRole(row) {
-                this.$http.post('/api/user/deleteDept',
+                this.axios.post('/api/user/deleteDept',
                     row).then(() => {
                     this.$message.info('删除成功！');
                     this.loadData();
                 }, (response) => {
-                    alert(JSON.stringify(response.body));
+                    alert(JSON.stringify(response.data));
                 });
             },
             insertOrUpdateRole() {
                 if (this.operationType === "update") {
-                    this.$http.post('/api/user/updateDept',
+                    this.axios.post('/api/user/updateDept',
                         this.form).then(() => {
                         this.$message.info('更新成功！');
                         this.dialogFormVisible = false;
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 } else {
-                    this.$http.post('/api/user/insertDept',
+                    this.axios.post('/api/user/insertDept',
                         this.form).then(() => {
                         this.$message.info('添加成功！');
                         this.loadData();
                         this.dialogFormVisible = false;
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 }
             }

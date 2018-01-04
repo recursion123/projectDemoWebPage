@@ -23,31 +23,32 @@
 </template>
 <script>
     export default {
-        data(){
+        data() {
             return {
-                username:"",
-                password:"",
-                loading:false
+                username: "",
+                password: "",
+                loading: false
             }
         },
+
         methods: {
             login() {
                 if (this.username && this.password && this.username.trim() !== "" && this.password.trim() !== "") {
-                    this.loading=true;
-                    this.$http.post('/api/login', {
+                    this.loading = true;
+                    this.axios.post('/api/login', {
                         name: this.username,
                         password: this.password
                     }).then((response) => {
-                        if (response.body > 0) {
-                            this.$store.commit("updateHeader", {'username': this.username, 'password': this.password});
-                            this.$router.push({name: 'adminArticleList'});
+                        if (response.data > 0) {
+                            this.store.commit("updateHeader", {'username': this.username, 'password': this.password});
+                            this.router.push({name: 'adminArticleList'});
                         } else {
                             this.$message.error('账号或密码错误');
                         }
                     }, () => {
                         this.$message.error('登录失败');
-                    }).then(()=>{
-                        this.loading=false;
+                    }).then(() => {
+                        this.loading = false;
                     });
                 } else {
                     this.$message.warning('用户名和密码不能为空');

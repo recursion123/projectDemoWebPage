@@ -64,13 +64,13 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/blog/listArticle', {}).then((response) => {
-                    this.articleList = response.body;
+                this.axios.post('/api/blog/listArticle', {}).then((response) => {
+                    this.articleList = response.data;
                 }, () => {
                     alert("error");
                 });
-                this.$http.post('/api/blog/listArticleTag', {}).then((response) => {
-                    this.articleTagList = response.body;
+                this.axios.post('/api/blog/listArticleTag', {}).then((response) => {
+                    this.articleTagList = response.data;
                 }, () => {
                     alert("error");
                 });

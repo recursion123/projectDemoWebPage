@@ -77,15 +77,15 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/blog/listArticle', {}).then((response) => {
-                    this.articleList = response.body;
+                this.axios.post('/api/blog/listArticle', {}).then((response) => {
+                    this.articleList = response.data;
                     this.total = this.articleList.length;
                     this.showPageData();
                 }, () => {
                     alert("error");
                 });
-                this.$http.post('/api/blog/listArticleTag', {}).then((response) => {
-                    this.articleTagList = response.body;
+                this.axios.post('/api/blog/listArticleTag', {}).then((response) => {
+                    this.articleTagList = response.data;
                 }, () => {
                     alert("error");
                 });
@@ -107,7 +107,7 @@
                 this.showPageData();
             },
             deleteArticle(article) {
-                this.$http.post('/api/admin/deleteArticle', article).then((response) => {
+                this.axios.post('/api/admin/deleteArticle', article).then((response) => {
                     this.$message.info('删除成功');
                     this.loadData();
                 }, () => {

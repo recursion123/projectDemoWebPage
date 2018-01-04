@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
+import axios from 'axios'
 import Vuex from 'vuex'
 import "babel-polyfill";
 
@@ -15,6 +15,9 @@ import 'summernote/dist/summernote.css'
 import 'codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
+
+import JSONEditor from 'jsoneditor/dist/jsoneditor-minimalist.js'
+import 'jsoneditor/dist/jsoneditor.min.css'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -36,7 +39,6 @@ import about from './blog/about.vue'
 
 
 Vue.use(VueRouter);
-Vue.use(VueResource);
 Vue.use(ElementUI);
 Vue.use(Vuex);
 
@@ -48,7 +50,7 @@ const store = new Vuex.Store({
     mutations: {
         updateHeader(state, userinfo) {
             state.header = 'Basic ' + window.btoa(userinfo.username + ":" + userinfo.password);
-            Vue.http.headers.common['Authorization'] = state.header;
+            axios.defaults.headers.common['Authorization'] = state.header;
         }
     }
 })
@@ -76,18 +78,20 @@ const router = new VueRouter({
     ]
 });
 
+
 const app = new Vue({
     render: h => h(App),
     router,
     store
 }).$mount('#app');
 
+Vue.prototype.axios = axios;
+Vue.prototype.router = router;
+Vue.prototype.store = store;
 
 Vue.prototype.goto = function (path) {
-    this.$router.push({path: path});
+    router.push({path: path});
 };
 
 jQuery('meta[name="viewport"]').attr('content', "width=device-width, initial-scale=0.8, maximum-scale=1, user-scalable=no");
-
-
 //Vue.http.headers.common['Authorization'] = 'Basic '+window.btoa(app.$data.username+":"+app.$data.password);

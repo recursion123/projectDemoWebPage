@@ -5,7 +5,6 @@
                 <el-col :span="16">
                     <el-card>
                         <el-button type="text" @click="showDialog()"> 添加</el-button>
-
                         <el-table
                                 :data="roleList"
                                 style="width: 100%">
@@ -54,7 +53,6 @@
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="insertOrUpdateRole()">确 定</el-button>
             </div>
-
         </el-dialog>
     </div>
 </template>
@@ -71,8 +69,8 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/user/listRole', {}).then((response) => {
-                    this.$data.roleList = response.body;
+                this.axios.post('/api/user/listRole', {}).then((response) => {
+                    this.roleList = response.data;
                 }, () => {
                     alert("请先登录!");
                     this.$router.push({name: 'login'});
@@ -88,31 +86,31 @@
                 }
             },
             deleteRole(row) {
-                this.$http.post('/api/user/deleteRole',
+                this.axios.post('/api/user/deleteRole',
                     row).then(() => {
                     this.$message.info('删除成功！');
                     this.loadData();
                 }, (response) => {
-                    alert(JSON.stringify(response.body));
+                    alert(JSON.stringify(response.data));
                 });
             },
             insertOrUpdateRole() {
                 if (this.operationType === "update") {
-                    this.$http.post('/api/user/updateRole',
+                    this.axios.post('/api/user/updateRole',
                         this.form).then(() => {
                         this.$message.info('更新成功！');
                         this.dialogFormVisible = false;
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 } else {
-                    this.$http.post('/api/user/insertRole',
+                    this.axios.post('/api/user/insertRole',
                         this.form).then(() => {
                         this.$message.info('添加成功！');
                         this.loadData();
                         this.dialogFormVisible = false;
                     }, (response) => {
-                        alert(JSON.stringify(response.body));
+                        alert(JSON.stringify(response.data));
                     });
                 }
             }

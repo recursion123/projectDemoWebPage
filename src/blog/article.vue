@@ -25,8 +25,8 @@
         },
         methods: {
             loadData() {
-                this.$http.post('/api/blog/findArticleByID?id=' + this.$route.params.articleID).then((response) => {
-                    this.article = response.body;
+                this.axios.post('/api/blog/findArticleByID?id=' + this.$route.params.articleID).then((response) => {
+                    this.article = response.data;
                     this.loading = false;
                 }, () => {
                     alert("请先登录!");
